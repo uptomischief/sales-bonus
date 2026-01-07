@@ -8,9 +8,9 @@ function calculateSimpleRevenue(purchase, _product) {
   // @TODO: Расчет выручки от операции
   const { discount, sale_price, quantity } = purchase;
 
-  const discountCoefficient = 1 - discount / 100;
+  const discountCoefficient = 1 - (discount / 100);
   const revenue = sale_price * quantity * discountCoefficient;
-  return revenue;
+  // return revenue;
 }
 
 /**
@@ -42,16 +42,18 @@ function calculateBonusByProfit(index, total, seller) {
  * @returns {{revenue, top_products, bonus, name, sales_count, profit, seller_id}[]}
  */
 function analyzeSalesData(data, options) {
-  const { calculateRevenue, calculateBonus } = options;
-  // @TODO: Проверка входных данных                         поменять
+  // @TODO: Проверка входных данных
   if (!data
-    || condition1
-    || condition2
+    || !Array.isArray(data.sellers) || data.sellers.length === 0
+    || !Array.isArray(data.products) || data.products.length === 0
+    || !Array.isArray(data.purchase_records) || data.purchase_records.length === 0
 ) {
     throw new Error('Некорректные входные данные');
 } 
 
   // @TODO: Проверка наличия опций
+const { calculateRevenue, calculateBonus } = options;
+
 
   // @TODO: Подготовка промежуточных данных для сбора статистики
   const sellerStats = data.sellers.map((seller) => ({
