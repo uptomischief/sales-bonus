@@ -68,8 +68,9 @@ if (typeof calculateRevenue !== 'function' || typeof calculateBonus !== 'functio
     products_sold: {},
   }));
 
-  // @TODO: Индексация продавцов и товаров для быстрого доступа                  поменять
-  const someIndex = Object.fromEntries(someArr.map(item => [item.ID, item]));
+  // @TODO: Индексация продавцов и товаров для быстрого доступа
+  const sellerIndex = Object.fromEntries(sellerStats.map(s => [s.ID, s]));
+  const productIndex = Object.fromEntries(data.products.map(p => [p.sku, p]));
 
   // @TODO: Расчет выручки и прибыли для каждого продавца
 
@@ -87,12 +88,12 @@ if (typeof calculateRevenue !== 'function' || typeof calculateBonus !== 'functio
 
   // @TODO: Подготовка итоговой коллекции с нужными полями
   return sellerStats.map(seller => ({
-        seller_id: ,// Строка, идентификатор продавца
-        name: ,// Строка, имя продавца
-        revenue: ,// Число с двумя знаками после точки, выручка продавца
-        profit: ,// Число с двумя знаками после точки, прибыль продавца
-        sales_count: ,// Целое число, количество продаж продавца
-        top_products: ,// Массив объектов вида: { "sku": "SKU_008","quantity": 10}, топ-10 товаров продавца
-        bonus: ,// Число с двумя знаками после точки, бонус продавца
+        seller_id: seller.id,// Строка, идентификатор продавца
+        name: seller.name,// Строка, имя продавца
+        revenue: Number(seller.revenue.toFixed(2)),// Число с двумя знаками после точки, выручка продавца
+        profit: Number(seller.profit.toFixed(2)),// Число с двумя знаками после точки, прибыль продавца
+        sales_count: seller.sales_count,// Целое число, количество продаж продавца
+        top_products: seller.top_products,// Массив объектов вида: { "sku": "SKU_008","quantity": 10}, топ-10 товаров продавца
+        bonus: Number(seller.bonus.toFixed(2))// Число с двумя знаками после точки, бонус продавца
 })); 
 }
