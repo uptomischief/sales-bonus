@@ -10,7 +10,7 @@ function calculateSimpleRevenue(purchase, _product) {
 
   const discountCoefficient = 1 - (discount / 100);
   const revenue = sale_price * quantity * discountCoefficient;
-  // return revenue;
+  return revenue;
 }
 
 /**
@@ -53,7 +53,9 @@ function analyzeSalesData(data, options) {
 
   // @TODO: Проверка наличия опций
 const { calculateRevenue, calculateBonus } = options;
-
+if (typeof calculateRevenue !== 'function' || typeof calculateBonus !== 'function') {
+  throw new Error('Некорректные опции');
+}
 
   // @TODO: Подготовка промежуточных данных для сбора статистики
   const sellerStats = data.sellers.map((seller) => ({
@@ -72,22 +74,25 @@ const { calculateRevenue, calculateBonus } = options;
   // @TODO: Расчет выручки и прибыли для каждого продавца
 
   // @TODO: Сортировка продавцов по прибыли
-  sellerStats.sort(/*функция сортировки*/);
+  sellerStats.sort((a, b) => b.profit - a.profit/*функция сортировки*/);
 
   // @TODO: Назначение премий на основе ранжирования
   sellerStats.forEach((seller, index) => {
-        seller.bonus = // Считаем бонус
-        seller.top_products = // Формируем топ-10 товаров
+        seller.bonus = calculateBonus(index, sellerStats.length, seller);// Считаем бонус
+        seller.top_products = Object.entries(seller.products_sold)
+          .map(([sku, quantity]) => ({sku, quantity}))
+          .sort((x,y) => y.quantity - x.quantity)
+          .slice(0, 10); // Формируем топ-10 товаров
 }); 
 
   // @TODO: Подготовка итоговой коллекции с нужными полями
   return sellerStats.map(seller => ({
-        seller_id: // Строка, идентификатор продавца
-        name: // Строка, имя продавца
-        revenue: // Число с двумя знаками после точки, выручка продавца
-        profit: // Число с двумя знаками после точки, прибыль продавца
-        sales_count: // Целое число, количество продаж продавца
-        top_products: // Массив объектов вида: { "sku": "SKU_008","quantity": 10}, топ-10 товаров продавца
-        bonus: // Число с двумя знаками после точки, бонус продавца
+        seller_id: ,// Строка, идентификатор продавца
+        name: ,// Строка, имя продавца
+        revenue: ,// Число с двумя знаками после точки, выручка продавца
+        profit: ,// Число с двумя знаками после точки, прибыль продавца
+        sales_count: ,// Целое число, количество продаж продавца
+        top_products: ,// Массив объектов вида: { "sku": "SKU_008","quantity": 10}, топ-10 товаров продавца
+        bonus: ,// Число с двумя знаками после точки, бонус продавца
 })); 
 }
